@@ -10,5 +10,3 @@ services:
   elastic.index.abstract:
     abstract: true
     class: Vainyl\Elastic\AbstractElasticIndex
-    tags:
-      - {name: search.index}
