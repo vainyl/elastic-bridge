@@ -1,0 +1,6 @@
+services:
+  connection.factory.elastic:
+    class: Vainyl\Elastic\Factory\ElasticConnectionFactory
+  database.factory.elastic:
+    class: Vainyl\Elastic\Factory\ElasticDatabaseFactory
+    arguments: ['@connection.storage']

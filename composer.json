@@ -1,0 +1,31 @@
+{
+    "name": "vainyl/elastic-bridge",
+    "type": "shared-package",
+    "authors": [
+        {
+            "name": "Taras Girnyk",
+            "email": "taras.p.gyrnik@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Vainyl\\Elastic\\": "src/"
+        }
+    },
+    "require": {
+        "php": ">=7.1",
+        "elasticsearch/elasticsearch": "^5.0",
+        "vainyl/connection": "dev-master",
+        "vainyl/core": "dev-master",
+        "vainyl/database": "dev-master",
+        "vainyl/search": "dev-master"
+    },
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://satis.vainyl.com:444"
+        }
+    ],
+    "prefer-stable": true,
+    "minimum-stability": "dev"
+}
