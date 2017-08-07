@@ -7,3 +7,8 @@ services:
     arguments: ['@connection.storage']
   elastic.client.builder:
     class: Vainyl\Elastic\ElasticClientBuilder
+  elastic.index.abstract:
+    abstract: true
+    class: Vainyl\Elastic\AbstractElasticIndex
+    tags:
+      - {name: search.index}

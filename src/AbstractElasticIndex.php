@@ -13,33 +13,21 @@ declare(strict_types=1);
 namespace Vainyl\Elastic;
 
 use Vainyl\Core\AbstractIdentifiable;
-use Vainyl\Core\IdentifiableInterface;
 use Vainyl\Search\FilterInterface;
 use Vainyl\Search\IndexInterface;
+use Vainyl\Search\SearchableInterface;
 
 /**
- * Class ElasticIndex
+ * Class AbstractElasticIndex
  *
  * @author Taras P. Girnyk <taras.p.gyrnik@gmail.com>
  */
-class ElasticIndex extends AbstractIdentifiable implements IndexInterface
+abstract class AbstractElasticIndex extends AbstractIdentifiable implements IndexInterface
 {
-    private $database;
-
-    /**
-     * AbstractElasticIndex constructor.
-     *
-     * @param ElasticDatabase $database
-     */
-    public function __construct(ElasticDatabase $database)
-    {
-        $this->database = $database;
-    }
-
     /**
      * @inheritDoc
      */
-    public function add(IdentifiableInterface $identifiable): bool
+    public function add(SearchableInterface $object): bool
     {
         trigger_error('Method add is not implemented', E_USER_ERROR);
     }
@@ -63,9 +51,9 @@ class ElasticIndex extends AbstractIdentifiable implements IndexInterface
     /**
      * @inheritDoc
      */
-    public function finOne(FilterInterface $filter): IdentifiableInterface
+    public function findOne(FilterInterface $filter): SearchableInterface
     {
-        trigger_error('Method finOne is not implemented', E_USER_ERROR);
+        trigger_error('Method findOne is not implemented', E_USER_ERROR);
     }
 
     /**
@@ -79,7 +67,7 @@ class ElasticIndex extends AbstractIdentifiable implements IndexInterface
     /**
      * @inheritDoc
      */
-    public function remove(IdentifiableInterface $identifiable): bool
+    public function remove(SearchableInterface $object): bool
     {
         trigger_error('Method remove is not implemented', E_USER_ERROR);
     }
@@ -87,8 +75,16 @@ class ElasticIndex extends AbstractIdentifiable implements IndexInterface
     /**
      * @inheritDoc
      */
-    public function supports(IdentifiableInterface $identifiable): bool
+    public function supports(string $name): bool
     {
         trigger_error('Method supports is not implemented', E_USER_ERROR);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function update(SearchableInterface $object): bool
+    {
+        trigger_error('Method update is not implemented', E_USER_ERROR);
     }
 }
