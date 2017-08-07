@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace Vainyl\Elastic;
 
+use Elasticsearch\Client;
 use Elasticsearch\ClientBuilder;
 use Vainyl\Connection\AbstractConnection;
 
@@ -19,6 +20,8 @@ use Vainyl\Connection\AbstractConnection;
  * Class ElasticConnection
  *
  * @author Taras P. Girnyk <taras.p.gyrnik@gmail.com>
+ *
+ * @method Client establish
  */
 class ElasticConnection extends AbstractConnection
 {
