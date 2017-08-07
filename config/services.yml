@@ -1,6 +1,9 @@
 services:
   connection.factory.elastic:
     class: Vainyl\Elastic\Factory\ElasticConnectionFactory
+    arguments: ['@elastic.client.builder']
   database.factory.elastic:
     class: Vainyl\Elastic\Factory\ElasticDatabaseFactory
     arguments: ['@connection.storage']
+  elastic.client.builder:
+    class: Vainyl\Elastic\ElasticClientBuilder

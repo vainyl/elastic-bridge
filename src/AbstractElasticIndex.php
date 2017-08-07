@@ -22,15 +22,15 @@ use Vainyl\Search\IndexInterface;
  */
 abstract class AbstractElasticIndex extends AbstractIdentifiable implements IndexInterface
 {
-    private $connection;
+    private $database;
 
     /**
      * AbstractElasticIndex constructor.
      *
-     * @param ElasticConnection $connection
+     * @param ElasticDatabase $database
      */
-    public function __construct(ElasticConnection $connection)
+    public function __construct(ElasticDatabase $database)
     {
-        $this->connection = $connection;
+        $this->database = $database;
     }
 }
