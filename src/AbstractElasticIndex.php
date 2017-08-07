@@ -12,7 +12,8 @@ declare(strict_types=1);
 
 namespace Vainyl\Elastic;
 
-use Vainyl\Core\AbstractIdentifiable;
+use Vainyl\Domain\Storage\DomainStorageInterface;
+use Vainyl\Search\AbstractIndex;
 use Vainyl\Search\FilterInterface;
 use Vainyl\Search\IndexInterface;
 use Vainyl\Search\SearchableInterface;
@@ -22,14 +23,20 @@ use Vainyl\Search\SearchableInterface;
  *
  * @author Taras P. Girnyk <taras.p.gyrnik@gmail.com>
  */
-abstract class AbstractElasticIndex extends AbstractIdentifiable implements IndexInterface
+abstract class AbstractElasticIndex extends AbstractIndex implements IndexInterface
 {
+    private $database;
+
     /**
-     * @inheritDoc
+     * AbstractElasticIndex constructor.
+     *
+     * @param ElasticDatabase        $database
+     * @param DomainStorageInterface $domainStorage
      */
-    public function add(SearchableInterface $object): bool
+    public function __construct(ElasticDatabase $database, DomainStorageInterface $domainStorage)
     {
-        trigger_error('Method add is not implemented', E_USER_ERROR);
+        $this->database = $database;
+        parent::__construct($domainStorage);
     }
 
     /**
@@ -37,7 +44,12 @@ abstract class AbstractElasticIndex extends AbstractIdentifiable implements Inde
      */
     public function clear(): bool
     {
-        trigger_error('Method clear is not implemented', E_USER_ERROR);
+        return $this->database->delete(
+            [
+                'index' => $this->getName(),
+                'type'  => $this->getType(),
+            ]
+        )['acknowledged'];
     }
 
     /**
@@ -45,46 +57,121 @@ abstract class AbstractElasticIndex extends AbstractIdentifiable implements Inde
      */
     public function create(): bool
     {
-        trigger_error('Method create is not implemented', E_USER_ERROR);
+        return $this->database->indices()->create(
+            [
+                'index' => $this->getName(),
+                'body'  => [
+                    'settings' => $this->getSettings(),
+                    'mappings' => $this->getMappings(),
+                ],
+            ]
+        )['acknowledged'];
     }
 
     /**
      * @inheritDoc
      */
-    public function findOne(FilterInterface $filter): SearchableInterface
+    public function doAdd(SearchableInterface $object): bool
     {
-        trigger_error('Method findOne is not implemented', E_USER_ERROR);
+        return $this->database->index(
+            [
+                'index' => $this->getName(),
+                'type'  => $this->getType(),
+                'id'    => $object->getId(),
+                'body'  => $this->map($object),
+            ]
+        )['acknowledged'];
     }
 
     /**
      * @inheritDoc
      */
-    public function find(FilterInterface $filter): array
+    public function doFindId(FilterInterface $filter): ?string
     {
-        trigger_error('Method find is not implemented', E_USER_ERROR);
+        return $this->database->search(
+            [
+                'index' => $this->getName(),
+                'type'  => $this->getType(),
+                'body'  => $filter->toArray(),
+            ]
+        )[''];
     }
 
     /**
      * @inheritDoc
      */
-    public function remove(SearchableInterface $object): bool
+    public function doFindIds(FilterInterface $filter): array
     {
-        trigger_error('Method remove is not implemented', E_USER_ERROR);
+        return $this->database->search(
+            [
+                'index' => $this->getName(),
+                'type'  => $this->getType(),
+                'body'  => $filter->toArray(),
+            ]
+        )[''];
     }
 
     /**
      * @inheritDoc
      */
-    public function supports(string $name): bool
+    public function doRemove(SearchableInterface $object): bool
     {
-        trigger_error('Method supports is not implemented', E_USER_ERROR);
+        return $this->database->delete(
+            [
+                'index' => $this->getName(),
+                'type'  => $this->getType(),
+                'id'    => $object->getId(),
+            ]
+        )['acknowledged'];
     }
 
     /**
      * @inheritDoc
      */
-    public function update(SearchableInterface $object): bool
+    public function doUpdate(SearchableInterface $object): bool
     {
-        trigger_error('Method update is not implemented', E_USER_ERROR);
+        return $this->database->update(
+            [
+                'index' => $this->getName(),
+                'type'  => $this->getType(),
+                'id'    => $object->getId(),
+                'body'  => [
+                    'upsert' => [
+                        $this->map($object),
+                    ],
+                ],
+
+            ]
+        )['acknowledged'];
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function drop(): bool
+    {
+        return $this->database->indices()->delete(['index' => $this->getName()])['acknowledged'];
+    }
+
+    /**
+     * @return array
+     */
+    abstract public function getMappings(): array;
+
+    /**
+     * @return array
+     */
+    abstract public function getSettings(): array;
+
+    /**
+     * @return string
+     */
+    abstract public function getType(): string;
+
+    /**
+     * @param SearchableInterface $searchable
+     *
+     * @return array
+     */
+    abstract public function map(SearchableInterface $searchable): array;
 }
