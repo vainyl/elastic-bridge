@@ -15,7 +15,6 @@ namespace Vainyl\Elastic\Factory;
 use Vainyl\Core\AbstractIdentifiable;
 use Vainyl\Database\DatabaseInterface;
 use Vainyl\Database\Factory\DatabaseFactoryInterface;
-use Vainyl\Elastic\ElasticDatabase;
 
 /**
  * Class ElasticDatabaseFactory
@@ -44,6 +43,6 @@ class ElasticDatabaseFactory extends AbstractIdentifiable implements DatabaseFac
         string $connectionName,
         array $options = []
     ): DatabaseInterface {
-        return new ElasticDatabase($databaseName, $this->connectionStorage[$connectionName]);
+        return $this->connectionStorage[$connectionName]->setDatabaseName($databaseName)->establish();
     }
 }

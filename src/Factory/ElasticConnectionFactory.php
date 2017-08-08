@@ -15,6 +15,7 @@ namespace Vainyl\Elastic\Factory;
 use Vainyl\Connection\ConnectionInterface;
 use Vainyl\Connection\Factory\ConnectionFactoryInterface;
 use Vainyl\Core\AbstractIdentifiable;
+use Vainyl\Elastic\ElasticClientBuilder;
 use Vainyl\Elastic\ElasticConnection;
 
 /**
@@ -24,11 +25,23 @@ use Vainyl\Elastic\ElasticConnection;
  */
 class ElasticConnectionFactory extends AbstractIdentifiable implements ConnectionFactoryInterface
 {
+    private $clientBuilder;
+
+    /**
+     * ElasticConnectionFactory constructor.
+     *
+     * @param ElasticClientBuilder $clientBuilder
+     */
+    public function __construct(ElasticClientBuilder $clientBuilder)
+    {
+        $this->clientBuilder = $clientBuilder;
+    }
+
     /**
      * @inheritDoc
      */
     public function createConnection(string $name, array $configData): ConnectionInterface
     {
-        return new ElasticConnection($name, $configData['hosts']);
+        return new ElasticConnection($name, $this->clientBuilder, $configData['hosts']);
     }
 }
