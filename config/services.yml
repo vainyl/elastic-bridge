@@ -10,4 +10,4 @@ services:
   elastic.index.abstract:
     abstract: true
     class: Vainyl\Elastic\AbstractElasticIndex
-    arguments: ['@database.elastic']
+    arguments: ['@database.index']
