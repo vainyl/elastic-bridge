@@ -15,10 +15,10 @@
     "require": {
         "php": ">=7.1",
         "elasticsearch/elasticsearch": "^5",
-        "vainyl/connection": "dev-master",
-        "vainyl/core": "dev-master",
-        "vainyl/database": "dev-master",
-        "vainyl/search": "dev-master"
+        "vainyl/connection": "0.2.x-dev",
+        "vainyl/core": "0.2.x-dev",
+        "vainyl/database": "0.2.x-dev",
+        "vainyl/search": "0.2.x-dev"
     },
     "repositories": [
         {
@@ -27,8 +27,8 @@
         }
     ],
     "provide": {
-        "vain/database": "dev-master",
-        "vain/search": "dev-master"
+        "vain/database": "^0.2",
+        "vain/search": "^0.2"
     },
     "prefer-stable": true,
     "minimum-stability": "dev"
