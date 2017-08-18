@@ -27,8 +27,8 @@
         }
     ],
     "provide": {
-        "vain/database": "^0.1",
-        "vain/search": "^0.1"
+        "vain/database": "dev-master",
+        "vain/search": "dev-master"
     },
     "prefer-stable": true,
     "minimum-stability": "dev"
